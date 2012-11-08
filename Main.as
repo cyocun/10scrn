@@ -1,7 +1,7 @@
 package
 {
-	import flash.display.MovieClip;
-	import flash.display.Sprite;
+	import flash.display.*;
+  import flash.events.*;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
 	import Commander;
@@ -11,26 +11,29 @@ package
 		//Properties
 
 		//Member variable a.k.a 演者
-		public var bg_mc:MovieClip;				//背景のmovieClip
+		public var bg_mc:MovieClip;					//背景のmovieClip
 		public var title_mc:MovieClip;			//タイトルのmovieClip
-		public var lead_mc:MovieClip;			//本文のmovieClip
+		public var lead_mc:MovieClip;				//本文のmovieClip
 		public var rectangle_mc:MovieClip;	//白い帯
-		public var product_mc:MovieClip;	//製品画像
+		public var product_mc:MovieClip;		//製品画像
+		//public var button_mc:MovieClip;			//テスト駆動用
 		private var _commander:Commander;		//司令塔
 
 		//Constructor
 		public function Main():void
 		{
-			//Main()はP5/oFでいうsetup()?
-			init();	//initに分けたほうがいい？
+			if (stage) init(null);
+			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
 		/**
 		* init
 		* システムにaddChild()されたとき実行されます。
 		*/
-		private function init():void
+		private function init(ev:Event):void
 		{
+			removeEventListener(Event.ADDED_TO_STAGE, init);
+
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			_commander = new Commander( this );
@@ -62,10 +65,16 @@ package
 			//Product
 			product_mc = new Product();
 			product_mc.x = 120;
-			product_mc.y = stage.stageHeight - product_mc.height;
+			product_mc.y = 2160 - product_mc.height;
 			addChild(product_mc);
 
-			startContent();
+			//button
+			//button_mc = new Button( this );
+			//button_mc.x = 10;
+			//button_mc.y = 10;
+			//addChild(button_mc);
+
+			//startContent();
 		}
 
 		/**

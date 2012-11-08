@@ -1,8 +1,10 @@
 package
 {
+	import flash.display.*;
+  import flash.events.*;
 	import Witer;
 
-	public class Commander
+	public class Commander extends Sprite
 	{
 		//Properties
 
@@ -13,16 +15,19 @@ package
 		//Constructor
 		public function Commander( main:Main ):void
 		{
+			if (stage) init(null);
+			else addEventListener(Event.ADDED_TO_STAGE, init);
+
 			_main = main;
-			init();
+			_waiter = new Witer();
 		}
 
 		/**
 		* init
 		*/
-		private function init():void
+		private function init(ev:Event):void
 		{
-			_waiter = new Witer();
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
 		/**
@@ -32,10 +37,10 @@ package
 		public function start():void
 		{
 			_main.bg_mc.show();
-			_waiter.wait(1000, _main.rectangle_mc.show);
-			_waiter.wait(2000, _main.title_mc.show);
-			_waiter.wait(3000, _main.lead_mc.show);
-			_waiter.wait(4000, _main.product_mc.show);
+			_waiter.wait(200, _main.rectangle_mc.show);
+			_waiter.wait(800, _main.title_mc.show);
+			_waiter.wait(1200, _main.lead_mc.show);
+			_waiter.wait(1700, _main.product_mc.show);
 		}
 
 		/**
@@ -44,10 +49,10 @@ package
 		*/
 		public function end():void
 		{
-			_waiter.wait(500, _main.rectangle_mc.hide);
-			_waiter.wait(700, _main.title_mc.hide);
-			_waiter.wait(900, _main.lead_mc.hide);
-			_waiter.wait(1000, _main.product_mc.hide);
+			_waiter.wait(0, _main.title_mc.hide);
+			_waiter.wait(200, _main.lead_mc.hide);
+			_waiter.wait(400, _main.product_mc.hide);
+			_waiter.wait(900, _main.rectangle_mc.hide);
 		}
 
 	}

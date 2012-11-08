@@ -1,43 +1,42 @@
 package
 {
 	import flash.display.*;
+  import flash.events.*;
+	import a24.tween.Tween24;
+	import a24.tween.events.Tween24Event;
 
 	public class Product extends MovieClip
 	{
 		//Properties
 
 		//Member variable
-		private var container:Sprite;		//マスクされるコンテナ
-		private var content:MovieClip;	//コンテナに入れるコンテンツ
-		private var maskShape:Shape;		//マスク
+		protected var maskShape:Shape;
 
 		//Constructor
 		public function Product()
 		{
-			//container
-			container = new Sprite;
-			container.x = 0;
-			container.y = 0;
-			addChild(container);
+			if (stage) init(null);
+			else addEventListener(Event.ADDED_TO_STAGE, init);
+		}
 
-			//content
-			content = new ProductContent;
-			content.x = 0;
-			content.y = 0;
-			container.addChild(content);
+		/**
+		* init
+		*/
+		private function init(ev:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 
 			//maskShape
 			maskShape = new Shape;
 			maskShape.graphics.beginFill(0xFFF);
-			maskShape.graphics.drawRect(0, 0, content.width, content.height);
+			maskShape.graphics.drawRect(0, 0, this.width, this.height);
 			maskShape.graphics.endFill();
 			maskShape.x = 0;
 			maskShape.y = 0;
 			maskShape.width = 0;
 			addChild(maskShape);
 
-			//マスク処理
-			container.mask = maskShape;
+			ProductContent.mask = maskShape;
 		}
 
 		/**
@@ -45,7 +44,9 @@ package
 		*/
 		public function show()
 		{
-			maskShape.width = content.width;
+			Tween24.tween(maskShape, .7, Tween24.ease.ExpoInOut)
+				.width(this.width)
+				.play();
 			trace("Hello," , this);
 		}
 
@@ -54,7 +55,9 @@ package
 		*/
 		public function hide()
 		{
-			maskShape.width = 0;
+			Tween24.tween(maskShape, .5, Tween24.ease.ExpoInOut)
+				.width(0)
+				.play();
 			trace("goodbye," , this);
 		}
 

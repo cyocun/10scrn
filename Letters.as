@@ -1,26 +1,48 @@
 package
 {
 	import flash.display.*;
+  import flash.events.*;
+	import a24.tween.Tween24;
+	import a24.tween.events.Tween24Event;
 
 	public class Letters extends MovieClip
 	{
 		//Properties
+		//private var tween:Tween24;
 
 		//Member variable
-		protected var contentRear:MovieClip;
+		//protected var contentRear:MovieClip;
+		//protected var contentFront:MovieClip;
 		protected var maskShapeRear:Shape;
-
-		protected var contentFront:MovieClip;
 		protected var maskShapeFront:Shape;
 
 		//Constructor
-		public function Letters(front:MovieClip, rear:MovieClip)
+		public function Letters()
 		{
-			contentRear = rear;
-			contentFront = front;
+			if (stage) init(null);
+			else addEventListener(Event.ADDED_TO_STAGE, init);
+
+		}
+
+		/**
+		* init
+		*/
+		public function init(ev:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, init);
+
+		}
+
+		/**
+		* setup
+		*/
+		protected function setup(rear:MovieClip, front:MovieClip)
+		{
+			var contentRear:MovieClip = rear;
+			var contentFront:MovieClip = front;
 
 			//contentcontentRear
-			contentRear.alpha = 0.5;
+			contentRear.alpha = 0.2;
 
 			//maskShapeRear
 			maskShapeRear = new Shape;
@@ -55,8 +77,13 @@ package
 		*/
 		public function show()
 		{
-			maskShapeRear.width = this.width;
-			maskShapeFront.width = this.width;
+			Tween24.tween(maskShapeRear, .5, Tween24.ease.ExpoInOut)
+				.width(this.width)
+				.play();
+			Tween24.tween(maskShapeFront, .5, Tween24.ease.ExpoInOut)
+				.width(this.width)
+				.delay(.3)
+				.play();
 			trace("Hello," , this);
 		}
 
@@ -65,8 +92,9 @@ package
 		*/
 		public function hide()
 		{
-			maskShapeRear.width = 0;
-			maskShapeFront.width = 0;
+			Tween24.tween([ maskShapeRear, maskShapeFront ], .5, Tween24.ease.ExpoInOut)
+				.width(0)
+				.play();
 			trace("goodbye," , this);
 		}
 
